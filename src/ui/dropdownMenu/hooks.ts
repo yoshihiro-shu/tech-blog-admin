@@ -8,12 +8,10 @@ export const useMenuButtonClickHandler = (
   ref: RefObject<HTMLDetailsElement>,
 ) => {
   const handleOutsideClick = useCallback(
-    (event: MouseEvent) => {
+    ({ target }: MouseEvent) => {
       const detailsElement = ref.current;
 
       if (!detailsElement) return;
-
-      const target = event.target;
 
       if (!target || !(target instanceof HTMLElement)) return;
 

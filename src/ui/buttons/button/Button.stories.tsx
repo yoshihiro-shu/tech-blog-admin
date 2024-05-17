@@ -1,9 +1,9 @@
 // storybook button component
-import { KebabButton } from "@/ui/button";
+import { Button } from "@/ui/buttons";
 import { type Meta, type StoryObj } from "@storybook/react";
 
 export default {
-  component: KebabButton,
+  component: Button,
   tags: ["autodocs"],
   decorators: [
     (Story) => (
@@ -12,13 +12,12 @@ export default {
       </div>
     ),
   ],
-} satisfies Meta<typeof KebabButton>;
+} satisfies Meta<typeof Button>;
 
-type Story = StoryObj<typeof KebabButton>;
+type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
   args: {
     children: "ボタン",
-    className: "bg-white",
   },
 };

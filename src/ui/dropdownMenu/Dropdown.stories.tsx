@@ -1,4 +1,4 @@
-import { MeetballsButton } from "@/ui/button/Icon";
+import { MeatballsButton } from "@/ui/buttons/iconButton";
 import { DropdownContainer, DropdownItem } from "@/ui/dropdownMenu";
 import { type Meta, type StoryObj } from "@storybook/react";
 
@@ -24,7 +24,7 @@ export const Default: Story = {
           <div key={i}>メニュー{i}</div>
         ))}
       >
-        <MeetballsButton className="bg-white" />
+        <MeatballsButton className="bg-white" />
       </DropdownItem>
     ),
   },

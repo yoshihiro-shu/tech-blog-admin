@@ -15,11 +15,11 @@ import { ReCAPTCHASignature } from "@/ui/form/securityVerifier/reCAPTCHASignatur
  * ```
  */
 export const VerifyProvider = ({ children }: { children: ReactNode }) => (
-    <GoogleReCaptchaProvider
-      reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY ?? ""}
-      language="ja"
-    >
-      {children}
-      <ReCAPTCHASignature />
-    </GoogleReCaptchaProvider>
-  );
+  <GoogleReCaptchaProvider
+    reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY ?? ""}
+    language="ja"
+  >
+    {children}
+    <ReCAPTCHASignature />
+  </GoogleReCaptchaProvider>
+);

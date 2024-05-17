@@ -55,7 +55,7 @@ export const useFormActionModal = (
 
 /**
  * 何らかの動作をするかどうかの確認用モーダルを作成するためのフック    \
- * formActionではなく、通常のReact Acitonを実行する想定    \
+ * formActionではなく、通常のReact Actionを実行する想定    \
  * 関数は`use server`ならサーバー側、`use client`ならクライアント側で実行される。
  * @param onClick 実行ボタンを押した時に実行する関数
  * @param actionText 実行ボタンのテキスト
@@ -98,5 +98,49 @@ export const useReactActionModal = (
     handleOpen,
     /** モーダルを表示するコンポーネント */
     ReactActionModal,
+  };
+};
+
+/**
+ * 閉じるボタンの無いモーダルを作成するためのフック
+ * アクションが成功した時のみ閉じることができる
+ * @param action 実行ボタンを押した時に実行する関数
+ * @param actionText 実行ボタンのテキスト
+ */
+export const useCloseOnSuccessModal = (
+  action: (formData: FormData) => void | Promise<void>,
+  actionText: string = "実行する",
+) => {
+  const { handleOpen, handleClose, Dialog } = useDialog();
+
+  const onAction = useCallback(
+    async (f: FormData) => {
+      await action(f);
+      handleClose();
+    },
+    [action, handleClose],
+  );
+
+  const CloseOnSuccessModal = useCallback(
+    ({ children }: { children: ReactNode }) => (
+      <Dialog hasNotClosableOverlay>
+        <div className="modal-box mx-auto">
+          <form className="flex flex-col gap-4" action={onAction}>
+            {children}
+            <SubmitButton className="btn-primary">{actionText}</SubmitButton>
+          </form>
+        </div>
+      </Dialog>
+    ),
+    [Dialog, actionText, onAction],
+  );
+
+  return {
+    /** モーダルを開く関数 */
+    handleOpen,
+    /** モーダルを閉じる関数 */
+    handleClose,
+    /** モーダルを表示するコンポーネント */
+    CloseOnSuccessModal,
   };
 };

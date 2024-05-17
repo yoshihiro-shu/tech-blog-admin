@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
  * 3つの点が横に並んだアイコンのボタン
  * アイコンだけなので、必ずaria-labelを指定する
  */
-export const MeetballsButton = ({
+export const MeatballsButton = ({
   className,
   ...props
 }: ComponentProps<"div">) => (

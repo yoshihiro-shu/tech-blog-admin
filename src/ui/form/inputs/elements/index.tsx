@@ -33,7 +33,16 @@ export const Input = memo(
       },
       ref,
     ) => {
-      const className = twMerge("input input-bordered", _className);
+      const isNumber = props.type === "number";
+      const numberClass =
+        isNumber &&
+        "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none pr-8";
+
+      const className = twMerge(
+        "input input-bordered",
+        _className,
+        numberClass,
+      );
       return (
         <div className="flex w-full flex-col">
           {labelText && <Label required={required}>{labelText}</Label>}

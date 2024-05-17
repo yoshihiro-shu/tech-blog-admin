@@ -16,11 +16,7 @@ export const TextLink = ({
   className,
   ...props
 }: TextLinkProps) => {
-  // toString()が使えないのでキャスト
-  // TODO: 型判定できるようなったら修正予定
-  // eslint-disable-next-line no-restricted-syntax
-  const hrefString = href as string;
-  const target = hrefString.startsWith("http") ? "_blank" : undefined;
+  const target = String(href).startsWith("http") ? "_blank" : undefined;
   return (
     <Link
       href={href}

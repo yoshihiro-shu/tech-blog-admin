@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type MouseEvent } from "react";
 
 import { RemoveScroll } from "react-remove-scroll";
 import { twMerge } from "tailwind-merge";
@@ -23,10 +23,10 @@ export const Dialog: React.FC<DialogProps> = ({
   children,
   onClose,
   hasNotClosableOverlay = false,
-}): React.ReactElement | null => {
+}) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  useEffect((): void => {
+  useEffect(() => {
     const dialogElement = dialogRef.current;
     if (!dialogElement) {
       return;
@@ -44,7 +44,7 @@ export const Dialog: React.FC<DialogProps> = ({
     }
   }, [isOpen]);
 
-  const handleClickDialog = useCallback((): void => {
+  const handleClickDialog = useCallback(() => {
     if (hasNotClosableOverlay) {
       return;
     }
@@ -52,7 +52,7 @@ export const Dialog: React.FC<DialogProps> = ({
   }, [onClose, hasNotClosableOverlay]);
 
   const handleClickContent = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>): void => {
+    (event: MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
     },
     [],

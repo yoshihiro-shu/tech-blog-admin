@@ -3,11 +3,11 @@
 import {
   useCallback,
   useState,
-  type ChangeEvent,
+  type ChangeEventHandler,
   type ComponentProps,
 } from "react";
 
-import { Input, Textarea } from "@/ui/form/inputs/Elements";
+import { Input, Textarea } from "@/ui/form/inputs/elements";
 
 type CommonProps = {
   /** 最大文字数 */
@@ -30,9 +30,16 @@ export const LimitInput = ({
   ...props
 }: LimitInputProps) => {
   const [charCount, setCharCount] = useState(0);
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setCharCount(e.currentTarget.value.length);
-  }, []);
+  const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    ({
+      currentTarget: {
+        value: { length },
+      },
+    }) => {
+      setCharCount(length);
+    },
+    [],
+  );
   const isOverLimit = charCount > maxLength;
   return (
     <>
@@ -67,9 +74,16 @@ export const LimitTextarea = ({
   ...props
 }: LimitTextareaProps) => {
   const [charCount, setCharCount] = useState(0);
-  const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-    setCharCount(e.currentTarget.value.length);
-  }, []);
+  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = useCallback(
+    ({
+      currentTarget: {
+        value: { length },
+      },
+    }) => {
+      setCharCount(length);
+    },
+    [],
+  );
   const isOverLimit = charCount > maxLength;
   return (
     <>

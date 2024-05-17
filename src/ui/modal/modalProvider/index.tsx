@@ -1,7 +1,7 @@
 "use client";
 
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import { memo, useCallback, useLayoutEffect, type ReactNode } from "react";
+import { memo, useCallback, useLayoutEffect } from "react";
 
 type ModalAtom = ReturnType<typeof atom<JSX.Element>>;
 
@@ -12,9 +12,9 @@ const AtomModal = memo(({ atom }: { atom: ModalAtom }) => useAtomValue(atom));
 AtomModal.displayName = "AtomModal";
 
 /**
- * モーダルを表示するために必要なコンポーネントを返す
+ * グローバルステートに登録されたモーダルを描画するコンポーネントを返すRender Hooks
  */
-const useModalContainer = () => {
+export const useModalContainer = () => {
   const modalsAtom = useAtomValue(modalAtomsAtom);
   const Modals = useCallback(
     () => (
@@ -28,20 +28,6 @@ const useModalContainer = () => {
   );
 
   return Modals;
-};
-
-/**
- * モーダルの骨組みを提供するコンポーネント    \
- * レイアウト下部に固定する
- */
-export const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const Modals = useModalContainer();
-  return (
-    <>
-      {children}
-      <Modals />
-    </>
-  );
 };
 
 /**

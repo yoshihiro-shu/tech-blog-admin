@@ -4,34 +4,11 @@ import { useCallback, useEffect, useRef, type ComponentProps } from "react";
 
 import toast from "react-hot-toast";
 
-import { toastErrors, type FormState } from "@/ui/form";
+import { type FormState } from "@/ui/form";
 import { useVerify } from "@/ui/form/securityVerifier/hooks";
-import { getObjectValues } from "@/utils/converter";
+
+import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
-
-/**
- * フォームの状態を監視し、エラーと通知をトースト表示する
- * @param formState フォームの状態
- * @todo 1箇所で使用されているので残しているが、削除予定
- * @deprecated
- */
-export const useFormMessageToaster = <T,>(formState: FormState<T>) => {
-  useEffect(() => {
-    if (formState.errors) {
-      getObjectValues(formState.errors).forEach((messages) => {
-        messages?.forEach((message) => {
-          toast.error(message);
-        });
-      });
-    }
-  }, [formState.errors]);
-
-  useEffect(() => {
-    if (formState.message) {
-      toast.success(formState.message);
-    }
-  }, [formState.message]);
-};
 
 const useMessageToaster = <T,>(
   formState: FormState<T>,
@@ -39,15 +16,16 @@ const useMessageToaster = <T,>(
 ) => {
   useEffect(() => {
     if (!hasToaster) return;
-    if (!formState.errors) return;
-    toastErrors(formState.errors);
-  }, [formState.errors, hasToaster]);
-
-  useEffect(() => {
-    if (!hasToaster) return;
-    if (!formState.message) return;
-    toast.success(formState.message);
-  }, [formState.message, hasToaster]);
+    if (!formState.result?.message) return;
+    switch (formState.result.type) {
+      case "error":
+        toast.error(formState.result.message);
+        break;
+      case "success":
+        toast.success(formState.result.message);
+        break;
+    }
+  }, [formState.result, hasToaster]);
 };
 
 export type FormOptions = {
@@ -68,7 +46,7 @@ export type FormOptions = {
  * @see https://react.dev/reference/react-dom/hooks/useFormState
  * @example src/app/(support)/inquiry/MailForm.tsx 参照
  */
-export const useForm = <T,>(
+export const useForm = <T extends Record<string, unknown>>(
   /** Submit時に実行するform action関数 */
   formAction: (s: FormState<T>, d: FormData) => Promise<FormState<T>>,
   /** フォームの初期状態 */
@@ -87,6 +65,11 @@ export const useForm = <T,>(
 
   useMessageToaster(state, showToast);
 
+  const router = useRouter();
+  if (state.redirect) {
+    router.push(state.redirect);
+  }
+
   const action = useCallback(
     async (f: FormData) => {
       if (authenticationRequired) {
@@ -98,7 +81,7 @@ export const useForm = <T,>(
         ref.current?.reset();
       }
     },
-    [dispatch, getVerificationCode, authenticationRequired, shouldReset],
+    [authenticationRequired, dispatch, getVerificationCode, shouldReset],
   );
 
   const Form = useCallback(
@@ -109,7 +92,7 @@ export const useForm = <T,>(
   );
 
   const register = useCallback(
-    (key: keyof T) => ({
+    <K extends keyof T>(key: K) => ({
       name: key,
       defaultValue: state.values[key],
     }),
@@ -125,8 +108,8 @@ export const useForm = <T,>(
      * @returns inputなどの入力要素に登録するべきプロパティ
      */
     register,
-    /** フォームの値にアクセスする場合に使用 */
-    values: state.values,
+    /** フォームのstateにアクセスする場合に使用 */
+    state,
     /** Formを使用せずにactionを受け取りたい場合に使用 */
     action,
   };

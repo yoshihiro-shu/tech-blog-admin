@@ -2,8 +2,8 @@ import { useCallback } from "react";
 
 import Image from "next/image";
 
-import { useDialog } from "@/ui/modal/dialog/useDialog";
-import { useSetModal } from "@/ui/modal/modalProvider/ModalProvider";
+import { useDialog } from "@/ui/modal/dialog";
+import { useSetModal } from "@/ui/modal/modalProvider";
 
 /**
  * 画像を拡大してモーダル表示するためのフック
